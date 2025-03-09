@@ -48,7 +48,7 @@ class ContactBottomSheet extends StatelessWidget {
               child: AppHeaderSecondary(
                         text: headerTitle, backPressed: () => Get.back(),
                         actions: [
-                          IconButton(
+                          if(removePressed!=null) IconButton(
                             onPressed: removePressed, 
                             icon: Icon(Icons.delete, color: Colors.grey,),
                           )

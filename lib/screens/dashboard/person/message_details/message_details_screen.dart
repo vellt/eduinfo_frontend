@@ -28,16 +28,22 @@ class MessageDetailsScreen extends StatelessWidget {
             ),
             Expanded(
               child: LoadingContainer(
-                  startLoading: controller.isLoading,                  
+                  startLoading: controller.isLoading,      
                   child: ListView.builder(
                     padding: EdgeInsets.only(top: 25),
-                    reverse: true,
+                    reverse: controller.isScrollable,
                     controller: controller.scrollController,
                     shrinkWrap: true,
                     physics: BouncingScrollPhysics(),
                     itemCount: controller.messageDetails.messages.length,
                     itemBuilder: (context, index) {
-                      var data = controller.messageDetails.messages.toList()[index];
+                      var data;
+                      if(controller.isScrollable){
+                        data = controller.messageDetails.messages.toList()[index];
+                      }else {
+                        data = controller.messageDetails.messages.reversed.toList()[index];
+                      }
+                      
                       return data.isMine
                           ? SentMessageBox(
                               message: data.message,
@@ -51,6 +57,7 @@ class MessageDetailsScreen extends StatelessWidget {
                   ),
               ),
             ),
+            
            MessageInputField(
             textEditingController: controller.messageController,
             onPressed: controller.sendMessages,

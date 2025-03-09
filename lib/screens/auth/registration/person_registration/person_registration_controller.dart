@@ -18,14 +18,14 @@ class PersonRegistrationController extends GetxController {
         } else if (responseData['errors'].isNotEmpty) {
           Get.snackbar(responseData['message'], responseData['errors']['errors'][0]['msg']);
         } else {
-          Get.snackbar("Hiba", responseData['message']);
+          Get.snackbar("Rendszerüzenet", responseData['message']);
         }
       } catch (e) {
         print("Hiba történt: $e");
-        Get.snackbar("Hiba", "Hálózati hiba történt. Ellenőrízd az internetkapcsolatod.");
+        Get.snackbar("Rendszerüzenet", "Hálózati hiba történt. Ellenőrízd az internetkapcsolatod.");
       }
     }else{
-      Get.snackbar("Hiba", "A jelszó és a jelszó megerősítésnek egyeznie kell.");
+      Get.snackbar("Rendszerüzenet", "A jelszó és a jelszó megerősítésnek egyeznie kell.");
     }
   } 
 

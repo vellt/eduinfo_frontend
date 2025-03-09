@@ -33,6 +33,7 @@ class FollowingListScreen extends StatelessWidget {
                         controller: controller.searchEventController, 
                         hintText: "Keresés",
                         icon: Icons.search,
+                        focusNode: controller.focusNode,
                       ),
                       Expanded(
                         child: SingleChildScrollView(

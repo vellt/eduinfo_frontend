@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 
 class MessageDetailsController extends GetxController {
   Timer? timer;
+  Timer? timer2;
+  bool isScrollable=true;
 
   String token = Get.arguments["token"] as String;
   int institutionId = Get.arguments["institution_id"] as int;
@@ -23,10 +25,12 @@ class MessageDetailsController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    loadMessageVersion();
     loadMessages(true);
-    scrollToBottom();
-    startTimer();
     
+    startTimer();
+    startTimer2();
+    scrollToBottom();
   }
 
   @override
@@ -91,6 +95,7 @@ class MessageDetailsController extends GetxController {
   
 
   void scrollToBottom() {
+    
     Future.delayed(Duration(milliseconds: 100), () {
       if (scrollController.hasClients) {
         scrollController.jumpTo(0);
@@ -101,6 +106,14 @@ class MessageDetailsController extends GetxController {
   void startTimer() {
     timer = Timer.periodic(Duration(seconds: 3), (_) {
       loadMessageVersion();
+    });
+  }
+
+  void startTimer2() {
+    timer = Timer.periodic(Duration(milliseconds: 100), (_) {
+      isScrollable = scrollController.hasClients && scrollController.position.maxScrollExtent > 0;
+      print(isScrollable);
+      update();
     });
   }
   

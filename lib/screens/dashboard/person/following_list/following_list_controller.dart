@@ -13,19 +13,17 @@ class FollowingListController extends GetxController {
   String token = Get.arguments["token"] as String;
 
   TextEditingController searchEventController =TextEditingController();
+  final FocusNode focusNode = FocusNode();
   bool isLoading = false;
 
   Person person= Get.arguments["person"] as Person;
   List<Institution> selectedInstitutionsData= [];
 
+
   @override
   void onInit()async {
     super.onInit();
-    searchEventController.addListener((){
-      selectedInstitutionsData=List.from(person.followedInstitutions.where((x)=>x.name.toLowerCase().contains(searchEventController.text.toLowerCase())).toList());
-      update();
-    });
-    getFollowedInstitutions();
+    selectedInstitutionsData=List.from(person.followedInstitutions);
     startTimer();
   }
 
@@ -36,8 +34,9 @@ class FollowingListController extends GetxController {
   }
 
   void startTimer() {
-    timer = Timer.periodic(Duration(seconds: 2), (_) async{
-      getFollowedInstitutions();
+     timer = Timer.periodic(Duration(milliseconds: 300), (_) async{
+      selectedInstitutionsData=List.from(person.followedInstitutions.where((x)=>x.name.toLowerCase().contains(searchEventController.text.toLowerCase())).toList());
+      update();
     });
   }
 
@@ -47,12 +46,8 @@ class FollowingListController extends GetxController {
 
   void navigateToPublicView(int id)async{
     await Get.toNamed('/public_view', arguments: {"token":token, "institution_id":id});
-    getFollowedInstitutions();
-  }
-
-  void getFollowedInstitutions() async {
-    selectedInstitutionsData=List.from(person.followedInstitutions);
-    update();
+    searchEventController.text="";
+    focusNode.unfocus();
   }
 
   List<Widget> institutions(){

@@ -22,7 +22,7 @@ class InstitutionResultsController extends GetxController {
     super.onInit();
     await loadInstitutionData();
     searchEventController.addListener((){
-      selectedInstitutionsData=List.from(institutionsData.where((x)=>x.name.contains(searchEventController.text)).toList());
+      selectedInstitutionsData=List.from(institutionsData.where((x)=>x.name.toLowerCase().contains(searchEventController.text.toLowerCase())).toList());
       update();
     });
   }

@@ -8,7 +8,8 @@ class RowTextField extends StatelessWidget {
     this.obscureText,
     required this.hintText,
     this.icon,
-    this.textInputType
+    this.textInputType,
+    this.focusNode,
   });
 
   TextEditingController controller;
@@ -16,6 +17,7 @@ class RowTextField extends StatelessWidget {
   String hintText;
   IconData? icon;
   TextInputType? textInputType;
+  FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class RowTextField extends StatelessWidget {
           child: TextField(
             obscureText: obscureText??false,
             keyboardType: textInputType,
+            focusNode: focusNode,
             controller: controller,
             style: TextStyle(
               fontWeight: FontWeight.normal,

@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                AppHeaderSecondary(text: "Fiók beállítások", backPressed: controller.back),
+                AppHeaderSecondary(text: "Fiókbeállítások", backPressed: controller.back),
                 Expanded(
                 child: SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
