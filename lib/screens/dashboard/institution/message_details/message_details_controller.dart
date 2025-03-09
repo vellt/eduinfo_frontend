@@ -5,13 +5,13 @@ import 'package:eduinfo/models/person.dart';
 import 'package:eduinfo/screens/dashboard/institution/message_details/message_details_network.dart';
 import 'package:eduinfo/models/message_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 class MessageDetailsController extends GetxController {
   Timer? timer;
   Timer? timer2;
   bool isScrollable=true;
-
 
   String token = Get.arguments["token"] as String;
   int messageRoomId = Get.arguments["message_room_id"] as int;
@@ -25,14 +25,33 @@ class MessageDetailsController extends GetxController {
   int messageVersion=0;
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+    isLoading = true;
+    update();
+
     loadMessageVersion();
-    loadMessages(true);
+    await loadMessages(false);
+
+    /// Scroll a lista aljára az első betöltésnél
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      scrollToBottom();
+    });
 
     startTimer();
-    startTimer2();
-    scrollToBottom();
+    startTimer2(); // Indítjuk az állapotfigyelőt is
+
+    isLoading = false;
+    update();
+
+    // Figyeljük a scroll állapotát, ha a user görget
+    scrollController.addListener(() {
+      bool newScrollable = scrollController.position.maxScrollExtent > 0;
+      if (newScrollable != isScrollable) {
+        isScrollable = newScrollable;
+        update();
+      }
+    });
   }
 
   @override
@@ -45,7 +64,7 @@ class MessageDetailsController extends GetxController {
     Get.back();
   }
   
-  void loadMessages(bool hasLoadingScreen) async {
+  Future<void> loadMessages(bool hasLoadingScreen) async {
     try {
       if (hasLoadingScreen) isLoading = true;
       update();
@@ -107,10 +126,14 @@ class MessageDetailsController extends GetxController {
   }
 
    void startTimer2() {
-    timer = Timer.periodic(Duration(milliseconds: 100), (_) {
-      isScrollable = scrollController.hasClients && scrollController.position.maxScrollExtent > 0;
-      print(isScrollable);
-      update();
+    timer2 = Timer.periodic(Duration(milliseconds: 2), (_) {
+      if (scrollController.hasClients) {
+        bool newScrollable = scrollController.position.maxScrollExtent > 0;
+        if (newScrollable != isScrollable) {
+          isScrollable = newScrollable;
+          update();
+        }
+      }
     });
   }
   

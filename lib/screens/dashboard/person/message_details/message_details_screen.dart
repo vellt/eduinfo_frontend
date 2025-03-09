@@ -33,6 +33,7 @@ class MessageDetailsScreen extends StatelessWidget {
                     padding: EdgeInsets.only(top: 25),
                     reverse: controller.isScrollable,
                     controller: controller.scrollController,
+                    
                     shrinkWrap: true,
                     physics: BouncingScrollPhysics(),
                     itemCount: controller.messageDetails.messages.length,
